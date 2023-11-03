@@ -4,25 +4,51 @@
 
 .app-container {
   text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .navbar {
-background: #333;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  width: 100%;
+  background: #181818;
   display: flex;
-  justify-content: center;
   z-index: 3;
 }
 
-.navbar a {
-  margin: 0 1rem;
-  color: white;
-  text-decoration: none;
+.navbar img {
+  width: 42px;
+  height: auto;
+  padding-left: 3rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-right: 0.5rem;
 }
 
-.home {
+.navbar a {
+  height: 100%;
+  margin: 0 1rem;
+  color: white;
+  padding: 0.5rem 1rem;
+}
+
+.navbar a:hover {
+  color: darkred;
+  font-weight: bold;
+}
+
+.navbar .right {
+  position: absolute;
+  right: 0;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.navbar .left {
+  padding-left: 0.5rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.home .top{
   position: relative;
   width: 100%; 
   height: auto; 
@@ -32,13 +58,23 @@ background: #333;
   justify-content: center;
 }
 
-.home img:first-child {
+.home .top .UB {
   display: block;
   filter: brightness(0.25);
   z-index: 1;
 }
 
-.home img:last-child {
+.home .top h1 {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 350px;
+  height: auto;
+}
+
+.home .top .Logo {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -46,4 +82,41 @@ background: #333;
   z-index: 2;
   width: 350px;
   height: auto;
+}
+
+.home .top h2 {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 640px;
+  height: auto;
+}
+
+.home .purposeSection, .home .mottoSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.home .purposeSection img, .home .mottoSection img {
+  width: 600px;
+  padding-left: 2rem;
+  padding-right: 1rem;
+  padding-top: 5rem;
+  padding-bottom: 2.5rem;
+  height: auto;
+}
+
+.home .purpose h2, .home .motto h2 {
+  padding-right: 2rem;
+  padding-left: 1rem;
+}
+
+.home .purpose p, .home .motto p {
+  padding-right: 2rem;
+  padding-left: 1rem;
+  max-width: 640px;
 }
