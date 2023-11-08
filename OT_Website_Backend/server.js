@@ -40,27 +40,6 @@ app.use(session({
 
 app.use('/users', userRoutes);
 
-// Check session route
-app.get('/check-session', (req, res) => {
-  if (req.session.user) {
-    res.json({ isLoggedIn: true, user: req.session.user });
-  } else {
-    res.json({ isLoggedIn: false });
-  }
-});
-
-// Logout route
-app.post('/logout', (req, res) => {
-  req.session.destroy(err => {
-    if (err) {
-      res.status(500).send('Error logging out');
-    } else {
-      res.clearCookie('connect.sid'); // Make sure to match the cookie name
-      res.json({ message: 'Logged out successfully' });
-    }
-  });
-});
-
 app.listen(process.env.PORT || 5000, () => { // Use the PORT environment variable for flexibility
   console.log(`Server is running on port ${process.env.PORT || 5000}`);
 });

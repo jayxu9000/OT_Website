@@ -1,46 +1,37 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook from React Router
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../components/AuthContext';
 
 function SignUp() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
-
+  const { login } = useAuth();
+  
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevents the default form submission behavior
-
-    // User data to be sent to the backend
-    const userData = {
-      username: username,
-      password: password
-    };
-
+    e.preventDefault();
+    setErrorMessage('');
+    
     try {
-      const response = await fetch('http://localhost:5000/users', {
+      const response = await fetch('http://localhost:5000/users/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json', // Expect to receive JSON back
         },
-        credentials: 'include', // Necessary to include the session cookie in requests
-        body: JSON.stringify(userData),
+        body: JSON.stringify({ username, password }),
       });
-
       const data = await response.json();
 
-      if (response.status === 201) {
-        // Reset any error messages
-        setErrorMessage('');
-        // Redirect user to their dashboard or another appropriate page
-        navigate('/'); // Change '/dashboard' to the path you want to redirect to after signup
+      if (response.ok) {
+        login(data);  // Call the login function from your auth context with the received data        
+        navigate('/'); // Redirect the user to the home page or dashboard
       } else {
-        // Display error message from the server, if any
-        setErrorMessage(data.message || 'An error occurred during signup.');
+        setErrorMessage(data.message || 'Signup failed.');  // If the signup was not successful, display the error message from the backend
       }
     } catch (error) {
-      console.error("There was an error with the POST request:", error);
-      setErrorMessage('An error occurred during signup.');
+      console.error('There was an error with the signup request:', error); // If there was a problem with the fetch request itself, display a generic error message
+      setErrorMessage('An error occurred during signup. Please try again later.');
     }
   };
 

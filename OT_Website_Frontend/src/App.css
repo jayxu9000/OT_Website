@@ -33,6 +33,7 @@
 .navbar a:hover {
   color: darkred;
   font-weight: bold;
+  border: none
 }
 
 .navbar .right {

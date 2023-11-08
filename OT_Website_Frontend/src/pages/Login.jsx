@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate hook from React Router
+import { useAuth } from '../components/AuthContext';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevents the default form submission behavior
@@ -23,7 +25,7 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        // Login was successful
+        login(data)
         navigate('/'); // Navigate to the homepage or dashboard after login
       } else {
         // Handle errors, e.g., wrong credentials, user doesn't exist, etc.
