@@ -1,12 +1,17 @@
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const saltRounds = 10; // Adjust as needed
+const multer = require('multer');
+const storage = multer.memoryStorage(); // Configure multer to store files in memory
+const upload = multer({ storage: storage });
+
 
 // POST route to add a new user
 router.post('/', async (req, res) => {
-    const { username, password } = req.body;
+    const { name, username, password, image, linkedIn } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ username });
@@ -21,8 +26,11 @@ router.post('/', async (req, res) => {
         }
 
         const newUser = new User({
+            name: name,
             username: username,
-            password: hashedPassword // Store the hashed password
+            password: hashedPassword, // Store the hashed password
+            image: image,
+            linkedIn: linkedIn
         });
 
         try {
@@ -60,7 +68,7 @@ router.post('/login', async (req, res) => {
         req.session.user = user;
 
         // Send a success response
-        res.json({ message: "Logged in successfully" });
+        res.status(201).json(user);
     } catch (error) {
         // If an error occurs, send a 500 Internal Server Error response
         res.status(500).json({ message: "Server error" });
@@ -78,6 +86,67 @@ router.post('/logout', (req, res) => {
         }
     });
 });
+
+// GET route to get the list of user names and images
+router.get('/Profile', async (req, res) => {
+    try {
+        // Fetch all users from the database and select only the 'name', 'image', and 'linkedIn' fields
+        const users = await User.find({}).select('name image linkedIn _id');
+        // Send back the list of users with only the selected fields
+        res.json(users);
+    } catch (err) {
+        // If an error occurs, send a 500 Internal Server Error response
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+router.put('/linkedIn/:username', async (req, res) => {
+    const { username } = req.params;
+    const { linkedIn } = req.body;
+
+    try {
+        const updateResult = await User.updateOne(
+            { username },
+            { $set: { linkedIn } }
+        );
+
+        if(updateResult.matchedCount === 0) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        res.status(200).json({ message: "LinkedIn updated successfully" });
+
+    } catch (err) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+router.put('/image/:username', upload.single('image'), async (req, res) => {
+    const { username } = req.params;
+    const image = req.file; // The uploaded file is available in req.file
+
+    if (!image) {
+        return res.status(400).json({ message: "No image uploaded." });
+    }
+
+    try {
+        // Convert the uploaded image to a buffer and store it in MongoDB
+        const updateResult = await User.updateOne(
+            { username },
+            { $set: { image: image.buffer } } // Store the image buffer
+        );
+
+        if (updateResult.matchedCount === 0) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        res.status(200).json({ message: "Image updated successfully" });
+
+    } catch (err) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
 
 // More routes can be added below
 

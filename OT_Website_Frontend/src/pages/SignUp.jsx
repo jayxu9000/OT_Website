@@ -3,9 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
 
 function SignUp() {
+  const [name, setName] = useState('')
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [image, setImage] = useState(null);
+  const [linkedIn, setlinkedIn] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
   
@@ -19,7 +22,7 @@ function SignUp() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ name, username, password, image, linkedIn }),
       });
       const data = await response.json();
 
@@ -36,9 +39,15 @@ function SignUp() {
   };
 
   return (
-    <div>
-      Sign Up Page:
-      <form onSubmit={handleSubmit}>
+    <div className='signUp'>
+      <h3>Sign Up</h3>
+      <form className='signUpForm' onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
         <input
           type="text"
           placeholder="Username"

@@ -1,18 +1,15 @@
 import React from "react";
+import linkedInLogo from "../assets/brotherhoodPhotos/linkedInLogo.png"
 
-function Profile({ props }) {
-
-    const handleClick = () => {
-
-    }
+function Profile({ img, name, linkedIn }) {
 
     return (
-        <div>
-            <div onClick={handleClick}>
-                <img src={props.img} alt="img" />
-                <Text>Lana Kim</Text>
-            </div>
-            {showPopup && <Popup content={props.description} handleClose={handleClose} />}
+        <div className="Profile">
+            <img src={img} alt="img" />
+            <span>{name}</span>
+            <a href={linkedIn} target="_blank" rel="noopener noreferrer">
+                <img src={linkedInLogo} alt="linkedIn" />
+            </a>
         </div>
     )
 }

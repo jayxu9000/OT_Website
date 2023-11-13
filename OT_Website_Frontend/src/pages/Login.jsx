@@ -3,9 +3,12 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate hook from 
 import { useAuth } from '../components/AuthContext';
 
 function Login() {
+  const [name, setName] = useState('')
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [image, setImage] = useState(null);
+  const [linkedIn, setlinkedIn] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -19,7 +22,7 @@ function Login() {
           'Content-Type': 'application/json',
         },
         credentials: 'include', // Necessary to include the session cookie in requests
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ name, username, password, image, linkedIn }),
       });
 
       const data = await response.json();
@@ -38,9 +41,9 @@ function Login() {
   };
 
   return (
-    <div>
-      Login Page:
-      <form onSubmit={handleSubmit}>
+    <div className='login'>
+      <h3>Login:</h3>
+      <form className='loginForm' onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Username"

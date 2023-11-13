@@ -6,6 +6,7 @@ import Brotherhood from './pages/Brotherhood';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Navbar from './components/Navbar';
+import Settings from './pages/Settings'
 import './App.css';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/brotherhood" element={<Brotherhood />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </div>
     </Router>

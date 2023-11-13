@@ -121,3 +121,33 @@
   padding-left: 1rem;
   max-width: 640px;
 }
+
+.login, .signUp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loginForm, .signUpForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.loginForm input, .signUpForm input {
+  margin: 1rem;
+  padding: 1rem;
+}
+
+.brotherList {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.Profile {
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  padding: 1rem;
+}
