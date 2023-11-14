@@ -151,3 +151,11 @@
   width: 150px;
   padding: 1rem;
 }
+
+.settings form {
+  padding: 0.5rem;
+}
+
+.settingsImage {
+  width: 150px;
+}

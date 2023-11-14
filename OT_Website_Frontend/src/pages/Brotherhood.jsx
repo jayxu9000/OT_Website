@@ -1,33 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import Profile from '../components/Profile';
-import blankProfile from '../assets/brotherhoodPhotos/blankProfile.jpg'
+import blankProfile from '../assets/brotherhoodPhotos/blankProfile.jpg';
 
 function Brotherhood() {
-  const [profile, setProfile] = useState([]);
+  const [profiles, setProfiles] = useState([]);
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchProfiles = async () => {
       try {
-        const response = await fetch('http://localhost:5000/users/Profile'); // Adjust the URL based on your server setup
+        const response = await fetch('http://localhost:5000/users/Profile');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const profileData = await response.json();
-        setProfile(profileData);
+
+        // Fetch and attach images to each user profile
+        const profilesWithImages = await Promise.all(
+          profileData.map(async (profile) => {
+            if (profile.image) {
+              const imageResponse = await fetch(`http://localhost:5000/users/Profile/image/${profile._id}`);
+              if (imageResponse.ok) {
+                const imageBlob = await imageResponse.blob();
+                const imageUrl = URL.createObjectURL(imageBlob);
+                profile.image = imageUrl;
+              }
+            }
+            return profile;
+          })
+        );
+
+        setProfiles(profilesWithImages);
       } catch (error) {
         console.error('Error fetching users:', error);
       }
     };
 
     // Call the function
-    fetchProfile();
+    fetchProfiles();
   }, []);
 
   return (
     <div className='Brothers'>
       <h3>Brothers:</h3>
       <div className='brotherList'>
-        {profile.map(profile => <Profile key={profile._id} name={profile.name} img={profile.image || blankProfile} linkedIn={profile.linkedIn} />)}
+        {profiles.map((profile) => (
+          <Profile key={profile._id} name={profile.name} img={profile.image || blankProfile} linkedIn={profile.linkedIn} />
+        ))}
       </div>
     </div>
   );

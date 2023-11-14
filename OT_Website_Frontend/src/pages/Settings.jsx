@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../components/AuthContext';
 
 function Settings() {
@@ -6,6 +6,25 @@ function Settings() {
     const [linkedInURL, setlinkedInURL] = useState('');
     const [image, setImage] = useState(null);
     const [updateStatus, setUpdateStatus] = useState('');
+
+
+    useEffect(() => {
+        const fetchUserImage = async () => {
+            try {
+                const imageResponse = await fetch(`http://localhost:5000/users/Profile/image/${authData._id}`);
+                if (imageResponse.ok) {
+                    const imageBlob = await imageResponse.blob();
+                    const imageUrl = URL.createObjectURL(imageBlob);
+                    authData.image = imageUrl;
+                }
+            } catch (error) {
+                console.error('Error fetching user image:', error);
+            }
+        };
+
+        // Call the inner async function
+        fetchUserImage();
+    }, [authData._id]); 
 
     const updateUserLinkedIn = async (e) => {
         e.preventDefault(); 
@@ -55,7 +74,7 @@ function Settings() {
             const data = await response.json();
             if (response.ok) {
                 console.log('Image updated', data);
-                setUpdateStatus('Image updated successfully.');
+                setUpdateStatus('Profile picture updated successfully.');
                 login({...authData, image: URL.createObjectURL(image) })
             } else {
                 console.error('Image update failed:', data.message);
@@ -65,6 +84,7 @@ function Settings() {
             console.error('There was an error with the update request:', error);
             setUpdateStatus('An error occurred during the update. Please try again later.');
         }
+
     };
 
     const handleImageChange = (e) => {
@@ -76,9 +96,20 @@ function Settings() {
       };
 
     return (
-        <div>
+        <div className='settings'>
             <h3>Settings:</h3>
             <h4>{authData.name}</h4>
+            <p>Current Profile Picture:</p>
+            <img className="settingsImage" src={authData.image} alt="Profile Picture" />
+            <form onSubmit={updateUserImage}>
+                <input
+                    type="file"
+                    placeholder="Select your file"
+                    onChange={handleImageChange}
+                    required
+                />
+                <button type="submit">Update Profile Picture</button>
+            </form>
             <p>Current LinkedIn: {authData.linkedIn}</p>
             <form onSubmit={updateUserLinkedIn}>
                 <input
@@ -89,16 +120,6 @@ function Settings() {
                     required
                 />
                 <button type="submit">Update LinkedIn</button>
-            </form>
-            <p>Current Image: {authData.image}</p>
-            <form onSubmit={updateUserImage}>
-                <input
-                    type="file"
-                    placeholder="Select your file"
-                    onChange={handleImageChange}
-                    required
-                />
-                <button type="submit">Update Image</button>
             </form>
             {updateStatus && <p>{updateStatus}</p>}
         </div>
