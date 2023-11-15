@@ -41,7 +41,7 @@ function Brotherhood() {
 
   return (
     <div className='Brothers'>
-      <h3>Brothers:</h3>
+      <h3>Members:</h3>
       <div className='brotherList'>
         {profiles.map((profile) => (
           <Profile key={profile._id} name={profile.name} img={profile.image || blankProfile} linkedIn={profile.linkedIn} />
