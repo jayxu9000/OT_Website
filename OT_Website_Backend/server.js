@@ -5,8 +5,6 @@ const cors = require('cors');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const userRoutes = require('./routes/userRoutes');
-const postRoutes = require('./routes/postRoutes')
-const commentRoutes = require('./routes/commentRoutes')
 
 const app = express();
 
@@ -41,9 +39,6 @@ app.use(session({
 }));
 
 app.use('/users', userRoutes);
-app.use('/api/posts', postRoutes);
-app.use('/api/comments', commentRoutes);
-
 
 app.listen(process.env.PORT || 5000, () => { // Use the PORT environment variable for flexibility
   console.log(`Server is running on port ${process.env.PORT || 5000}`);

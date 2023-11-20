@@ -11,8 +11,8 @@ function Navbar() {
       <img src={coatOfArms} alt='coatOfArms' />
       <div className='left'>
         <Link to="/">Home</Link>
-        <Link to="/rush">Forum</Link>
-        <Link to="/brotherhood">Members</Link>
+        <Link to="/rush">Rush</Link>
+        <Link to="/brotherhood">Brotherhood</Link>
       </div>
       <div className='right'>
         {authData ? (

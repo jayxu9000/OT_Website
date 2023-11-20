@@ -1,72 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { fetchPosts, createPost, fetchComments } from '../services/api';
-import PostList from '../components/PostList';
-import { useAuth } from '../components/AuthContext';
+import axios from 'axios';
 
-const Rush = () => {
-    const { authData } = useAuth();
-    const [originalPosts, setOriginalPosts] = useState([]); // Added for original order
-    const [posts, setPosts] = useState([]);
-    const [newPostContent, setNewPostContent] = useState('');
+function Rush() {
+  const [posts, setPosts] = useState([]);
+  const [content, setContent] = useState('');
 
-    useEffect(() => {
-        const loadPostsAndComments = async () => {
-            try {
-                const postsResponse = await fetchPosts();
-                const postsWithComments = await Promise.all(
-                    postsResponse.data.map(async (post) => {
-                        const commentsResponse = await fetchComments(post._id);
-                        return { ...post, comments: commentsResponse.data };
-                    })
-                );
-                setOriginalPosts(postsWithComments); // Set original posts
-                setPosts(postsWithComments); // Set posts that can be sorted
-            } catch (error) {
-                console.error('Error loading posts and comments:', error);
-            }
-        };
+  useEffect(() => {
+    axios.get('http://localhost:5000/posts/get')
+      .then(res => setPosts(res.data))
+      .catch(err => console.log(err));
+  }, []);
 
-        loadPostsAndComments();
-    }, []);
+  const handleSubmit = e => {
+    e.preventDefault();
+    axios.post('http://localhost:5000/posts/put', { content })
+      .then(res => {
+        setPosts([...posts, res.data]);
+        setContent('');
+      })
+      .catch(err => console.log(err));
+  };
 
-    const handlePostSubmit = async (event) => {
-        event.preventDefault();
-        if (!newPostContent) return;
-
-        const newPost = { content: newPostContent, authorId: authData._id };
-        const response = await createPost(newPost);
-
-        // Update both originalPosts and posts to maintain synchronization
-        const newPostArray = [response.data, ...posts];
-        setOriginalPosts(newPostArray);
-        setPosts(newPostArray);
-        setNewPostContent(''); // Reset the input field after submission
-    };
-
-    const sortByUsername = () => {
-        const sortedPosts = [...posts].sort((a, b) => a.author.username.localeCompare(b.author.username));
-        setPosts(sortedPosts);
-    };
-
-    const revertToOriginalOrder = () => {
-        setPosts([...originalPosts]);
-    };
-
-    return (
-        <div>
-            <button onClick={sortByUsername}>Sort by Username</button>
-            <button onClick={revertToOriginalOrder}>Original Order</button>
-            <form onSubmit={handlePostSubmit}>
-                <textarea 
-                    value={newPostContent}
-                    onChange={(e) => setNewPostContent(e.target.value)}
-                    placeholder="What's on your mind?"
-                />
-                <button type="submit">Post</button>
-            </form>
-            <PostList posts={posts} setPosts={setPosts} />
-        </div>
-    );
-};
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={content}
+          onChange={e => setContent(e.target.value)}
+        />
+        <button type="submit">Post</button>
+      </form>
+      <ul>
+        {posts.map(post => (
+          <li key={post._id}>{post.content}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export default Rush;
