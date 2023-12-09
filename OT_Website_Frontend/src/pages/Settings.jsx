@@ -4,7 +4,7 @@ import { useAuth } from '../components/AuthContext';
 function Settings() {
     const { authData, login } = useAuth(); 
     const [linkedInURL, setlinkedInURL] = useState('');
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState(authData.image);
     const [updateStatus, setUpdateStatus] = useState('');
 
 
