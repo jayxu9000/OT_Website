@@ -4,7 +4,6 @@ import { useAuth } from '../components/AuthContext';
 function Settings() {
     const { authData, login } = useAuth(); 
     const [linkedInURL, setlinkedInURL] = useState('');
-    const [image, setImage] = useState(authData.image);
     const [updateStatus, setUpdateStatus] = useState('');
 
 
@@ -13,9 +12,10 @@ function Settings() {
             try {
                 const imageResponse = await fetch(`http://localhost:5000/users/Profile/image/${authData._id}`);
                 if (imageResponse.ok) {
+                    console.log(imageResponse)
                     const imageBlob = await imageResponse.blob();
                     const imageUrl = URL.createObjectURL(imageBlob);
-                    authData.image = imageUrl;
+                    authData.image = imageUrl
                 }
             } catch (error) {
                 console.error('Error fetching user image:', error);
