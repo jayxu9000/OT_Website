@@ -17,7 +17,7 @@ function Navbar() {
       <div className='right'>
         {authData ? (
           <>
-            <Link to="/settings">{authData.name}</Link>
+            <Link to="/settings">{authData.firstName}</Link>
             <Link to="/" onClick={logout}>Logout</Link>
           </>
         ) : (

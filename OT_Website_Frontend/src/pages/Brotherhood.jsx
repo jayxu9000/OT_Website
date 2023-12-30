@@ -29,7 +29,8 @@ function Brotherhood() {
           })
         );
 
-        setProfiles(profilesWithImages);
+        const verifiedProfiles = profilesWithImages.filter(profiles => profiles.verified);
+        setProfiles(verifiedProfiles);
       } catch (error) {
         console.error('Error fetching users:', error);
       }
@@ -41,10 +42,10 @@ function Brotherhood() {
 
   return (
     <div className='Brothers'>
-      <h3>Brothers:</h3>
+      <h2>Brothers:</h2>
       <div className='brotherList'>
         {profiles.map((profile) => (
-          <Profile key={profile._id} name={profile.name} img={profile.image || blankProfile} linkedIn={profile.linkedIn} />
+          <Profile key={profile._id} firstName={profile.firstName} lastName={profile.lastName} img={profile.image || blankProfile} linkedIn={profile.linkedIn} />
         ))}
       </div>
     </div>

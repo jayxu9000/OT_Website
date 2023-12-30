@@ -1,30 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../components/AuthContext';
+import AdminList from '../components/AdminList';
+import NewList from '../components/newList';
+import DemoteButton from '../components/DemoteButton';
 
 function Settings() {
     const { authData, login } = useAuth(); 
     const [linkedInURL, setlinkedInURL] = useState('');
     const [updateStatus, setUpdateStatus] = useState('');
-
-
-    useEffect(() => {
-        const fetchUserImage = async () => {
-            try {
-                const imageResponse = await fetch(`http://localhost:5000/users/Profile/image/${authData._id}`);
-                if (imageResponse.ok) {
-                    console.log(imageResponse)
-                    const imageBlob = await imageResponse.blob();
-                    const imageUrl = URL.createObjectURL(imageBlob);
-                    authData.image = imageUrl
-                }
-            } catch (error) {
-                console.error('Error fetching user image:', error);
-            }
-        };
-
-        // Call the inner async function
-        fetchUserImage();
-    }, [authData._id]); 
+    const [image, setImage] = useState(null)
+    const [isAdmin, setIsAdmin] = useState(false);
 
     const updateUserLinkedIn = async (e) => {
         e.preventDefault(); 
@@ -34,7 +19,7 @@ function Settings() {
         };
 
         try {
-            const response = await fetch(`http://localhost:5000/users/linkedIn/${authData.username}`, {
+            const response = await fetch(`http://localhost:5000/users/linkedIn/${authData.email}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -66,7 +51,7 @@ function Settings() {
         }
 
         try {
-            const response = await fetch(`http://localhost:5000/users/image/${authData.username}`, {
+            const response = await fetch(`http://localhost:5000/users/image/${authData.email}`, {
                 method: 'PUT',
                 body: formData
             });
@@ -93,35 +78,69 @@ function Settings() {
         if (file) {
           setImage(file);
         }
-      };
+    };
+
+    useEffect(() => {
+        const checkAdminStatus = async () => {
+            try {
+                const response = await fetch(`http://localhost:5000/users/checkAdminStatus/${authData._id}`, {
+                    credentials: 'include' // If you're using sessions
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setIsAdmin(data.isAdmin);
+                } else {
+                    console.error('Failed to check admin status');
+                }
+            } catch (error) {
+                console.error('Error checking admin status:', error);
+            }
+        };
+
+        checkAdminStatus();
+    }, []);
+
 
     return (
         <div className='settings'>
-            <h3>Settings:</h3>
-            <h4>{authData.name}</h4>
-            <p>Current Profile Picture:</p>
-            <img className="settingsImage" src={authData.image} alt="Profile Picture" />
-            <form onSubmit={updateUserImage}>
-                <input
-                    type="file"
-                    placeholder="Select your file"
-                    onChange={handleImageChange}
-                    required
-                />
-                <button type="submit">Update Profile Picture</button>
-            </form>
-            <p>Current LinkedIn: {authData.linkedIn}</p>
-            <form onSubmit={updateUserLinkedIn}>
-                <input
-                    type="url"
-                    placeholder="Enter your LinkedIn URL"
-                    value={linkedInURL}
-                    onChange={(e) => setlinkedInURL(e.target.value)}
-                    required
-                />
-                <button type="submit">Update LinkedIn</button>
-            </form>
-            {updateStatus && <p>{updateStatus}</p>}
+            <div className='imageSection'>
+                <h2>Settings:</h2>
+                <h4>{authData.name}</h4>
+                <p>Current Profile Picture:</p>
+                <img className="settingsImage" src={authData.image} alt="Profile Picture" />
+                <form onSubmit={updateUserImage}>
+                    <input
+                        type="file"
+                        placeholder="Select your file"
+                        onChange={handleImageChange}
+                        required
+                    />
+                    <button type="submit">Update Profile Picture</button>
+                </form>
+            </div>
+            <div className='currentLinkedIn'>
+                <p>Current LinkedIn: {authData.linkedIn}</p>
+                <form onSubmit={updateUserLinkedIn}>
+                    <input
+                        type="url"
+                        placeholder="Enter your LinkedIn URL"
+                        value={linkedInURL}
+                        onChange={(e) => setlinkedInURL(e.target.value)}
+                        required
+                    />
+                    <button type="submit">Update LinkedIn</button>
+                </form>
+                {updateStatus && <p>{updateStatus}</p>}
+            </div>
+           
+            {isAdmin && (
+                <div className='tableContainer'>
+                    <DemoteButton />
+                    <AdminList />
+                    <NewList />
+                </div>
+            )}
         </div>
     );
 };

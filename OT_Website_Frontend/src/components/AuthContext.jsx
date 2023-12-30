@@ -1,16 +1,11 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import blankProfile from '../assets/brotherhoodPhotos/blankProfile.jpg';
 
 const AuthContext = createContext(null);
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-
-  useEffect(() => {
-    if (authData && authData._id) {
-      fetchUserImage(authData._id);
-    }
-  }, []);
 
   const [authData, setAuthData] = useState(() => {
     // Check for auth data in local storage
@@ -21,11 +16,14 @@ export const AuthProvider = ({ children }) => {
   const fetchUserImage = async (userId) => {
     try {
       const imageResponse = await fetch(`http://localhost:5000/users/Profile/image/${userId}`);
+      let imageUrl;
       if (imageResponse.ok) {
         const imageBlob = await imageResponse.blob();
-        const imageUrl = URL.createObjectURL(imageBlob);
-        setAuthData(prevData => ({ ...prevData, image: imageUrl }));
+        imageUrl = URL.createObjectURL(imageBlob);
+      } else {
+        imageUrl = blankProfile;
       }
+      setAuthData(prevData => ({ ...prevData, image: imageUrl }));
     } catch (error) {
       console.error('Error fetching user image:', error);
     }
@@ -41,6 +39,12 @@ export const AuthProvider = ({ children }) => {
     setAuthData(null);
     localStorage.removeItem('authData'); // Remove auth data from local storage
   };
+
+  useEffect(() => {
+    if (authData?._id) {
+      fetchUserImage(authData._id);
+    }
+  }, [authData?._id]);
 
   return (
     <AuthContext.Provider value={{ authData, login, logout }}>

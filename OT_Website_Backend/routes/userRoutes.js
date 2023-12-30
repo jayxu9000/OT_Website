@@ -10,12 +10,12 @@ const upload = multer({ storage: storage });
 
 // POST route to add a new user
 router.post('/', async (req, res) => {
-    const { name, username, password, image, linkedIn } = req.body;
+    const { firstName, lastName, lineNumber, email, password, image, linkedIn, verified, admin } = req.body;
 
     // Check if user already exists
-    const existingUser = await User.findOne({ username });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
-        return res.status(400).json({ message: "Username already exists." });
+        return res.status(400).json({ message: "Email already associated with an account." });
     }
 
     // Hash the password
@@ -25,11 +25,15 @@ router.post('/', async (req, res) => {
         }
 
         const newUser = new User({
-            name: name,
-            username: username,
+            firstName: firstName,
+            lastName: lastName,
+            lineNumber: lineNumber,
+            email: email,
             password: hashedPassword, // Store the hashed password
             image: image,
-            linkedIn: linkedIn
+            linkedIn: linkedIn,
+            verified: verified,
+            admin: admin
         });
 
         try {
@@ -45,14 +49,14 @@ router.post('/', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         // Extract username and password from request body
-        const { username, password } = req.body;
+        const { email, password } = req.body;
 
         // Find the user by username
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ email });
 
         // If user doesn't exist, send a 401 Unauthorized response
         if (!user) {
-            return res.status(401).json({ message: "user doesn't exist" });
+            return res.status(401).json({ message: "User doesn't exist or incorrect email" });
         }
 
         // Compare the hashed password
@@ -90,7 +94,7 @@ router.post('/logout', (req, res) => {
 router.get('/Profile', async (req, res) => {
     try {
         // Fetch all users from the database and select only the 'name', 'image', and 'linkedIn' fields
-        const users = await User.find({}).select('name image linkedIn _id');
+        const users = await User.find({}).select('firstName lastName image linkedIn _id verified');
         // Send back the list of users with only the selected fields
         res.json(users);
     } catch (err) {
@@ -126,13 +130,13 @@ router.get('/Profile/image/:id', async (req, res) => {
     }
 });
 
-router.put('/linkedIn/:username', async (req, res) => {
-    const { username } = req.params;
+router.put('/linkedIn/:email', async (req, res) => {
+    const { email } = req.params;
     const { linkedIn } = req.body;
 
     try {
         const updateResult = await User.updateOne(
-            { username },
+            { email },
             { $set: { linkedIn } }
         );
 
@@ -147,8 +151,8 @@ router.put('/linkedIn/:username', async (req, res) => {
     }
 });
 
-router.put('/image/:username', upload.single('image'), async (req, res) => {
-    const { username } = req.params;
+router.put('/image/:email', upload.single('image'), async (req, res) => {
+    const { email } = req.params;
     const image = req.file; // The uploaded file is available in req.file
 
     if (!image) {
@@ -158,7 +162,7 @@ router.put('/image/:username', upload.single('image'), async (req, res) => {
     try {
         // Convert the uploaded image to a buffer and store it in MongoDB
         const updateResult = await User.updateOne(
-            { username },
+            { email },
             { $set: { image: image.buffer } } // Store the image buffer
         );
 
@@ -173,6 +177,118 @@ router.put('/image/:username', upload.single('image'), async (req, res) => {
     }
 });
 
+// GET route to get a list of non-admin users with specific fields
+router.get('/nonAdminUsers', async (req, res) => {
+    try {
+        // Fetch users where 'admin' is false and select only the specified fields
+        const nonAdminUsers = await User.find({ admin: false }).select('firstName lastName lineNumber _id');
+        // Send back the list of non-admin users
+        res.json(nonAdminUsers);
+    } catch (err) {
+        // If an error occurs, send a 500 Internal Server Error response
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+// PUT route to promote a user to admin
+router.put('/promoteToAdmin/:userId', async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const updateResult = await User.findByIdAndUpdate(
+            userId,
+            { $set: { admin: true } },
+            { new: true } // This option returns the document after update
+        );
+
+        if (!updateResult) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        res.status(200).json({ message: "User promoted to admin successfully", user: updateResult });
+
+    } catch (err) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+// PUT route for a user to demote themselves from admin
+router.put('/demoteFromAdmin/:userId', async (req, res) => {
+    const { userId } = req.params;
+    // Assuming you store the logged-in user's ID in the session
+    // You need to ensure that your session middleware is set up correctly
+    try {
+        const updateResult = await User.findByIdAndUpdate(
+            userId,
+            { $set: { admin: false } },
+            { new: true } // This option returns the document after update
+        );
+
+        if (!updateResult) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        // Optionally, update the user information in the session
+        // req.session.user = updateResult;
+
+        res.status(200).json({ message: "You are no longer an admin.", user: updateResult });
+
+    } catch (err) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+// GET route to check current user's admin status
+router.get('/checkAdminStatus/:userId', async (req, res) => {
+
+    const { userId } = req.params;
+    
+    try {
+        const user = await User.findById(userId).select('admin');
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json({ isAdmin: user.admin });
+
+    } catch (err) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+router.get('/nonVerifiedUsers', async (req, res) => {
+    try {
+        // Fetch users where 'admin' is false and select only the specified fields
+        const nonVerifiedUsers = await User.find({ verified: false }).select('firstName lastName lineNumber _id');
+        // Send back the list of non-admin users
+        res.json(nonVerifiedUsers);
+    } catch (err) {
+        // If an error occurs, send a 500 Internal Server Error response
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+router.put('/promoteToVerified/:userId', async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        const updateResult = await User.findByIdAndUpdate(
+            userId,
+            { $set: { verified: true } },
+            { new: true } // This option returns the document after update
+        );
+
+        if (!updateResult) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        res.status(200).json({ message: "User verified successfully", user: updateResult });
+
+    } catch (err) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
 // More routes can be added below
 
 module.exports = router;

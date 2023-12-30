@@ -3,12 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
 
 function SignUp() {
-  const [name, setName] = useState('')
-  const [username, setUsername] = useState('');
+
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [lineNumber, setLineNumber] = useState(null)
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
   const [image, setImage] = useState(null);
   const [linkedIn, setlinkedIn] = useState('');
+  const [verified, setVerified] = useState(false)
+  const [admin, setAdmin] = useState(false)
+
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
   
@@ -22,7 +28,7 @@ function SignUp() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, username, password, image, linkedIn }),
+        body: JSON.stringify({ firstName, lastName, lineNumber, email, password, image, linkedIn, verified, admin }),
       });
       const data = await response.json();
 
@@ -38,21 +44,43 @@ function SignUp() {
     }
   };
 
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+    if (!/^[a-zA-Z0-9._%+-]+@buffalo\.edu$/.test(value)) {
+        setErrorMessage('Please enter a University at Buffalo email address.');
+    } else {
+        setErrorMessage('');
+    }
+};
+
   return (
     <div className='signUp'>
       <h3>Sign Up</h3>
       <form className='signUpForm' onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          placeholder="First Name"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
         />
         <input
           type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Last Name"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="Line Number"
+          value={lineNumber}
+          onChange={(e) => setLineNumber(e.target.value)}
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={handleEmailChange}
         />
         <input
           type="password"
