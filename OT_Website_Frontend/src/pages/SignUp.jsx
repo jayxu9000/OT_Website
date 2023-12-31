@@ -24,7 +24,7 @@ function SignUp() {
     setErrorMessage('');
     
     try {
-      const response = await fetch(`${apiUrl}/users/`, {
+      const response = await fetch('https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com:5000/users/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

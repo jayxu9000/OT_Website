@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 
 function AdminList() {
     const [users, setUsers] = useState([]);
-    const apiUrl = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
         // Function to fetch non-admin users
         const fetchNonAdminUsers = async () => {
             try {
-                const response = await fetch(`${apiUrl}/users/nonAdminUsers/`); // Adjust the URL as needed
+                const response = await fetch('https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com:5000/users/nonAdminUsers/'); // Adjust the URL as needed
                 if (response.ok) {
                     const data = await response.json();
                     setUsers(data);
@@ -27,7 +26,7 @@ function AdminList() {
     const handleAdminPromotion = async (userId) => {
         console.log(`Button for user ${userId} was clicked`);
         try {
-            const response = await fetch(`${apiUrl}/users/promoteToAdmin/${userId}`, {
+            const response = await fetch(`https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com:5000/users/promoteToAdmin/${userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
