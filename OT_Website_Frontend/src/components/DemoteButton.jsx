@@ -6,7 +6,7 @@ function DemoteButton() {
 
     const handleDemoteClick = async () => {
         try {
-            const response = await fetch(`https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com:5000/users/demoteFromAdmin/${authData._id}`, {
+            const response = await fetch(`https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com:80/users/demoteFromAdmin/${authData._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
