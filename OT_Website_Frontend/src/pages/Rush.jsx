@@ -6,14 +6,14 @@ function Rush() {
   const [content, setContent] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/posts/get')
+    axios.get('https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com/posts/get')
       .then(res => setPosts(res.data))
       .catch(err => console.log(err));
   }, []);
 
   const handleSubmit = e => {
     e.preventDefault();
-    axios.post('http://localhost:5000/posts/put', { content })
+    axios.post('https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com/posts/put', { content })
       .then(res => {
         setPosts([...posts, res.data]);
         setContent('');

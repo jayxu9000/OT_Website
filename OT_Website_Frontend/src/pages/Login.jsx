@@ -17,7 +17,7 @@ function Login() {
     event.preventDefault(); // Prevents the default form submission behavior
 
     try {
-      const response = await fetch('http://localhost:5000/users/login', {
+      const response = await fetch('https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

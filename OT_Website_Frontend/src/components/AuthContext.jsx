@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUserImage = async (userId) => {
     try {
-      const imageResponse = await fetch(`http://localhost:5000/users/Profile/image/${userId}`);
+      const imageResponse = await fetch(`https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com/users/Profile/image/${userId}`);
       let imageUrl;
       if (imageResponse.ok) {
         const imageBlob = await imageResponse.blob();

@@ -19,7 +19,7 @@ function Settings() {
         };
 
         try {
-            const response = await fetch(`http://localhost:5000/users/linkedIn/${authData.email}`, {
+            const response = await fetch(`https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com/users/linkedIn/${authData.email}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ function Settings() {
         }
 
         try {
-            const response = await fetch(`http://localhost:5000/users/image/${authData.email}`, {
+            const response = await fetch(`https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com/users/image/${authData.email}`, {
                 method: 'PUT',
                 body: formData
             });
@@ -83,7 +83,7 @@ function Settings() {
     useEffect(() => {
         const checkAdminStatus = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/users/checkAdminStatus/${authData._id}`, {
+                const response = await fetch(`https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com/users/checkAdminStatus/${authData._id}`, {
                     credentials: 'include' // If you're using sessions
                 });
 
