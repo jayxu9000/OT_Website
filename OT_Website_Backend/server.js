@@ -44,6 +44,15 @@ app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
+app.get('/healthcheck', async (req, res) => {
+  try {
+    await mongoose.connection.db.admin().ping();
+    res.status(200).json({ status: 'ok' });
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: err.message });
+  }
+});
+
 app.listen(process.env.PORT, '0.0.0.0', () => { // Use the PORT environment variable for flexibility
   console.log(`Server is running on port ${process.env.PORT || 80}`);
 });
