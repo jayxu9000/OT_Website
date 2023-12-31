@@ -40,6 +40,10 @@ app.use(session({
 
 app.use('/users', userRoutes);
 
+app.get('/', (req, res) => {
+  res.send('Hello, World!');
+});
+
 app.listen(process.env.PORT || 5000, () => { // Use the PORT environment variable for flexibility
   console.log(`Server is running on port ${process.env.PORT || 5000}`);
 });
