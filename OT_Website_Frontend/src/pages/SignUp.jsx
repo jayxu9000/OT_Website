@@ -13,6 +13,7 @@ function SignUp() {
   const [linkedIn, setlinkedIn] = useState('');
   const [verified, setVerified] = useState(false)
   const [admin, setAdmin] = useState(false)
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ function SignUp() {
     setErrorMessage('');
     
     try {
-      const response = await fetch('https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com/users/', {
+      const response = await fetch(`${apiUrl}/users/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

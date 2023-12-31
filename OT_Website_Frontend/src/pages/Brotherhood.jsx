@@ -4,11 +4,12 @@ import blankProfile from '../assets/brotherhoodPhotos/blankProfile.jpg';
 
 function Brotherhood() {
   const [profiles, setProfiles] = useState([]);
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
-        const response = await fetch('https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com/users/Profile');
+        const response = await fetch(`${apiUrl}/users/Profile`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -18,7 +19,7 @@ function Brotherhood() {
         const profilesWithImages = await Promise.all(
           profileData.map(async (profile) => {
             if (profile.image) {
-              const imageResponse = await fetch(`https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com/users/Profile/image/${profile._id}`);
+              const imageResponse = await fetch(`${apiUrl}/users/Profile/image/${profile._id}`);
               if (imageResponse.ok) {
                 const imageBlob = await imageResponse.blob();
                 const imageUrl = URL.createObjectURL(imageBlob);

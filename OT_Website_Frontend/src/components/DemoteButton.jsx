@@ -1,14 +1,13 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
 
 function DemoteButton() {
     const { authData } = useAuth();
-    const navigate = useNavigate();
+    const apiUrl = process.env.REACT_APP_API_URL;
 
     const handleDemoteClick = async () => {
         try {
-            const response = await fetch(`https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com/users/demoteFromAdmin/${authData._id}`, {
+            const response = await fetch(`${apiUrl}/users/demoteFromAdmin/${authData._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

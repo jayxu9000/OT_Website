@@ -12,12 +12,13 @@ function Login() {
   const [linkedIn, setlinkedIn] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevents the default form submission behavior
 
     try {
-      const response = await fetch('https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com/users/login', {
+      const response = await fetch(`${apiUrl}/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
