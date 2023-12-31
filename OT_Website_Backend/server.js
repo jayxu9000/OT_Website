@@ -54,5 +54,5 @@ app.get('/healthcheck', async (req, res) => {
 });
 
 app.listen(process.env.PORT, '0.0.0.0', () => { // Use the PORT environment variable for flexibility
-  console.log(`Server is running on port ${process.env.PORT || 80}`);
+  console.log(`Server is running on port ${process.env.PORT || 443}`);
 });

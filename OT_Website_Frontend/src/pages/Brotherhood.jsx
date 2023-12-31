@@ -8,7 +8,7 @@ function Brotherhood() {
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
-        const response = await fetch('https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com:80/users/Profile');
+        const response = await fetch('https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com:443/users/Profile');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -18,7 +18,7 @@ function Brotherhood() {
         const profilesWithImages = await Promise.all(
           profileData.map(async (profile) => {
             if (profile.image) {
-              const imageResponse = await fetch(`https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com:80/users/Profile/image/${profile._id}`);
+              const imageResponse = await fetch(`https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com:443/users/Profile/image/${profile._id}`);
               if (imageResponse.ok) {
                 const imageBlob = await imageResponse.blob();
                 const imageUrl = URL.createObjectURL(imageBlob);
