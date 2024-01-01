@@ -3,10 +3,11 @@ import { useAuth } from '../components/AuthContext';
 
 function DemoteButton() {
     const { authData } = useAuth();
+    const apiUrl = process.env.REACT_APP_API_BASE_URL
 
     const handleDemoteClick = async () => {
         try {
-            const response = await fetch(`https://ec2-34-233-135-215.compute-1.amazonaws.com:443/users/demoteFromAdmin/${authData._id}`, {
+            const response = await fetch(`${apiUrl}/users/demoteFromAdmin/${authData._id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

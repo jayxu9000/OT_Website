@@ -10,6 +10,7 @@ function Settings() {
     const [updateStatus, setUpdateStatus] = useState('');
     const [image, setImage] = useState(null)
     const [isAdmin, setIsAdmin] = useState(false);
+    const apiUrl = process.env.REACT_APP_API_BASE_URL
     
 
     const updateUserLinkedIn = async (e) => {
@@ -20,7 +21,7 @@ function Settings() {
         };
 
         try {
-            const response = await fetch(`https://ec2-34-233-135-215.compute-1.amazonaws.com:443/users/linkedIn/${authData.email}`, {
+            const response = await fetch(`${apiUrl}/users/linkedIn/${authData.email}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,7 +53,7 @@ function Settings() {
         }
 
         try {
-            const response = await fetch(`https://ec2-34-233-135-215.compute-1.amazonaws.com:443/users/image/${authData.email}`, {
+            const response = await fetch(`${apiUrl}/users/image/${authData.email}`, {
                 method: 'PUT',
                 body: formData
             });
@@ -84,7 +85,7 @@ function Settings() {
     useEffect(() => {
         const checkAdminStatus = async () => {
             try {
-                const response = await fetch(`https://ec2-34-233-135-215.compute-1.amazonaws.com:443/users/checkAdminStatus/${authData._id}`, {
+                const response = await fetch(`${apiUrl}/users/checkAdminStatus/${authData._id}`, {
                     credentials: 'include' // If you're using sessions
                 });
 

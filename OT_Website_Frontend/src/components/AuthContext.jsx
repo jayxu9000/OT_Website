@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import blankProfile from '../assets/brotherhoodPhotos/blankProfile.jpg';
 
 const AuthContext = createContext(null);
+const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
 export const useAuth = () => useContext(AuthContext);
 
@@ -15,7 +16,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUserImage = async (userId) => {
     try {
-      const imageResponse = await fetch(`https://ec2-34-233-135-215.compute-1.amazonaws.com:443/users/Profile/image/${userId}`);
+      const imageResponse = await fetch(`${apiUrl}/users/Profile/image/${userId}`);
       let imageUrl;
       if (imageResponse.ok) {
         const imageBlob = await imageResponse.blob();
