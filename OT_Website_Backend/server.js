@@ -13,7 +13,7 @@ const mongoDBURI = process.env.MONGODB_URI;
 const sessionSecret = process.env.SESSION_SECRET;
 
 app.use(cors({
-  origin: ['http://ot-website.s3-website-us-east-1.amazonaws.com/'], // Adjust the origin according to your frontend
+  origin: ['http://ot-website-frontend.s3-website-us-east-1.amazonaws.com/'], // Adjust the origin according to your frontend
   credentials: true // Allows cookies to be sent with requests
 }));
 app.use(express.json());

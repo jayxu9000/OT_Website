@@ -6,7 +6,7 @@ function NewList() {
     useEffect(() => {
         const fetchNonVerifiedUsers = async () => {
             try {
-                const response = await fetch('https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com:443/users/nonVerifiedUsers'); // Adjust the URL as needed
+                const response = await fetch('https://ec2-34-233-135-215.compute-1.amazonaws.com:443/users/nonVerifiedUsers'); // Adjust the URL as needed
                 if (response.ok) {
                     const data = await response.json();
                     setUsers(data);
@@ -25,7 +25,7 @@ function NewList() {
     const handleVerification = async (userId) => {
         console.log(`Button for user ${userId} was clicked`);
         try {
-            const response = await fetch(`https://ec2-18-117-157-65.us-east-2.compute.amazonaws.com:443/users/promoteToVerified/${userId}`, {
+            const response = await fetch(`https://ec2-34-233-135-215.compute-1.amazonaws.com:443/users/promoteToVerified/${userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
