@@ -8,6 +8,14 @@ body {
   padding: 0;
 }
 
+h3 {
+  color: white;
+}
+
+p {
+  color: white;
+}
+
 .app-container {
   text-align: center;
   display: flex;

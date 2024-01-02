@@ -108,7 +108,7 @@ function Settings() {
         <div className='settings'>
             <div className='imageSection'>
                 <h2>Settings:</h2>
-                <h3>{authData.name}</h3>
+                <p>{authData.name}</p>
                 <p>Current Profile Picture:</p>
                 <img className="settingsImage" src={authData.image} alt="Profile Picture" />
                 <form onSubmit={updateUserImage}>
