@@ -3,7 +3,7 @@ services:
   name: OT_Website
   env: static
   buildCommand: cd frontend && npm run build
-  staticPublishPath: OT_Website_Frontend/dist
+  staticPublishPath: ./OT_Website_Frontend/dist
   routes:
     - type: rewrite
       source: /** # Matches all paths
