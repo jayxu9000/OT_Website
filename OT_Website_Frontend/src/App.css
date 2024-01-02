@@ -151,8 +151,17 @@
   display: flex;
   flex-direction: column;
   width: 150px;
-  height: 150px;
   padding: 1rem;
+}
+
+.profile img {
+  width: 150px;
+  height: 150px;
+}
+
+.refs {
+  width: 25px;
+  height: 25px;
 }
 
 .settings {
