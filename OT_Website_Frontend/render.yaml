@@ -1,6 +1,6 @@
 services:
 - type: web
-  name: ot-website
+  name: OT_Website
   env: static
   buildCommand: npm run build
   staticPublishPath: ./dist
