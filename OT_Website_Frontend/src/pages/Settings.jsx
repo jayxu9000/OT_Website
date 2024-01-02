@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../components/AuthContext';
 import AdminList from '../components/AdminList';
-import NewList from '../components/newList';
+import NewList from '../components/NewList';
 import DemoteButton from '../components/DemoteButton';
 
 function Settings() {
