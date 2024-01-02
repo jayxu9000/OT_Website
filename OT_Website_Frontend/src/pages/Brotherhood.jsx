@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import Profile from '../components/Profile';
 import blankProfile from '../assets/brotherhoodPhotos/blankProfile.jpg';
+import LoadingSpinner from '../components/LoadingSpinner'; // Import a loading spinner component
 
 function Brotherhood() {
   const [profiles, setProfiles] = useState([]);
+  const [isLoading, setIsLoading] = useState(false); // Loading state
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchProfiles = async () => {
+      setIsLoading(true); // Start loading
       try {
         const response = await fetch(`${apiUrl}/users/Profile`);
         if (!response.ok) {
@@ -30,25 +33,29 @@ function Brotherhood() {
           })
         );
 
-        const verifiedProfiles = profilesWithImages.filter(profiles => profiles.verified);
+        const verifiedProfiles = profilesWithImages.filter(profile => profile.verified);
         setProfiles(verifiedProfiles);
       } catch (error) {
         console.error('Error fetching users:', error);
       }
+      setIsLoading(false); // Stop loading
     };
 
-    // Call the function
     fetchProfiles();
   }, []);
 
   return (
     <div className='Brothers'>
       <h2>Brothers:</h2>
-      <div className='brotherList'>
-        {profiles.map((profile) => (
-          <Profile key={profile._id} firstName={profile.firstName} lastName={profile.lastName} img={profile.image || blankProfile} linkedIn={profile.linkedIn} />
-        ))}
-      </div>
+      {isLoading ? (
+        <LoadingSpinner /> // Show loading spinner when data is loading
+      ) : (
+        <div className='brotherList'>
+          {profiles.map((profile) => (
+            <Profile key={profile._id} firstName={profile.firstName} lastName={profile.lastName} img={profile.image || blankProfile} linkedIn={profile.linkedIn} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
