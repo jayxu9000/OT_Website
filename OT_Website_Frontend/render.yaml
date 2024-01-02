@@ -1,0 +1,10 @@
+services:
+- type: web
+  name: ot-website
+  env: static
+  buildCommand: npm run build
+  staticPublishPath: ./dist
+  routes:
+    - type: rewrite
+      source: /** # Matches all paths
+      destination: /index.html # Redirects to the index.html
