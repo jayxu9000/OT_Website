@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Profile from '../components/Profile';
 import blankProfile from '../assets/brotherhoodPhotos/blankProfile.jpg';
-import LoadingSpinner from '../components/LoadingSpinner'; // Import a loading spinner component
+import LoadingSpinner from '../components/LoadSpinner';
 
 function Brotherhood() {
   const [profiles, setProfiles] = useState([]);
