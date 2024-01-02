@@ -118,6 +118,7 @@ function Settings() {
                         onChange={handleImageChange}
                         required
                     />
+                    <p>Note: Profile images must be a perfect square for best quality. Ex: 150x150</p>
                     <button type="submit">Update Profile Picture</button>
                 </form>
             </div>
