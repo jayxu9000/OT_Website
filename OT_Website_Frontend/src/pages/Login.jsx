@@ -12,7 +12,7 @@ function Login() {
   const [linkedIn, setlinkedIn] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
-  const apiUrl = process.env.REACT_APP_API_URL;
+  const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevents the default form submission behavior

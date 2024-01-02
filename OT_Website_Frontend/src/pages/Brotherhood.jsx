@@ -4,7 +4,7 @@ import blankProfile from '../assets/brotherhoodPhotos/blankProfile.jpg';
 
 function Brotherhood() {
   const [profiles, setProfiles] = useState([]);
-  const apiUrl = process.env.REACT_APP_API_BASE_URL
+  const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchProfiles = async () => {

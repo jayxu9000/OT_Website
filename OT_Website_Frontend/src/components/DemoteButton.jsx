@@ -3,7 +3,7 @@ import { useAuth } from '../components/AuthContext';
 
 function DemoteButton() {
     const { authData } = useAuth();
-    const apiUrl = process.env.REACT_APP_API_BASE_URL
+    const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
     const handleDemoteClick = async () => {
         try {

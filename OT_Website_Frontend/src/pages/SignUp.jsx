@@ -13,7 +13,7 @@ function SignUp() {
   const [linkedIn, setlinkedIn] = useState('');
   const [verified, setVerified] = useState(false)
   const [admin, setAdmin] = useState(false)
-  const apiUrl = process.env.REACT_APP_API_URL;
+  const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();

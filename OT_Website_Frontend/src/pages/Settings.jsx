@@ -10,7 +10,7 @@ function Settings() {
     const [updateStatus, setUpdateStatus] = useState('');
     const [image, setImage] = useState(null)
     const [isAdmin, setIsAdmin] = useState(false);
-    const apiUrl = process.env.REACT_APP_API_BASE_URL
+    const apiUrl = import.meta.env.VITE_API_BASE_URL;
     
 
     const updateUserLinkedIn = async (e) => {
