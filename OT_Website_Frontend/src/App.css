@@ -8,6 +8,15 @@ body {
   padding: 0;
 }
 
+button {
+  background-color: #181818;
+  color: white;
+}
+
+h2 {
+  color: white;
+}
+
 h3 {
   color: white;
 }

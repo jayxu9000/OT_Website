@@ -90,15 +90,22 @@ router.post('/logout', (req, res) => {
     });
 });
 
-// GET route to get the list of user names and images
 router.get('/Profile', async (req, res) => {
     try {
-        // Fetch all users from the database and select only the 'name', 'image', and 'linkedIn' fields
         const users = await User.find({}).select('firstName lastName image linkedIn _id verified');
-        // Send back the list of users with only the selected fields
-        res.json(users);
+
+        const usersWithBase64Images = users.map(user => {
+            if (user.image && user.image.contentType) {
+                // Convert the buffer to a Base64 string
+                const imageBase64 = user.image.toString('base64');
+                // Prepend the appropriate data URI scheme header based on the contentType
+                user.image = `data:${user.image.contentType};base64,${imageBase64}`;
+            }
+            return user;
+        });
+
+        res.json(usersWithBase64Images);
     } catch (err) {
-        // If an error occurs, send a 500 Internal Server Error response
         res.status(500).json({ message: "Server error" });
     }
 });

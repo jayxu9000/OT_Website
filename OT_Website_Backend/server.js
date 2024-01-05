@@ -11,9 +11,10 @@ const app = express();
 // Since your MongoDB credentials and secret should be stored in .env, replace the strings with these:
 const mongoDBURI = process.env.MONGODB_URI;
 const sessionSecret = process.env.SESSION_SECRET;
+const corsOrigin = process.env.FRONTEND_ORIGIN
 
 app.use(cors({
-  origin: ['https://ot-website.onrender.com'], // Adjust the origin according to your frontend
+  origin: corsOrigin, // Adjust the origin according to your frontend
   credentials: true // Allows cookies to be sent with requests
 }));
 app.use(express.json());
