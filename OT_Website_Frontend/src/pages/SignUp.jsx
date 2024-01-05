@@ -35,7 +35,7 @@ function SignUp() {
 
       if (response.ok) {
         login(data);  // Call the login function from your auth context with the received data        
-        navigate('/'); // Redirect the user to the home page or dashboard
+        navigate('/verification'); // Redirect the user to the home page or dashboard
       } else {
         setErrorMessage(data.message || 'Signup failed.');  // If the signup was not successful, display the error message from the backend
       }

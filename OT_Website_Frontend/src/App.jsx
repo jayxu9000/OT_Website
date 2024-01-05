@@ -8,6 +8,7 @@ import SignUp from './pages/SignUp';
 import Navbar from './components/Navbar';
 import Settings from './pages/Settings'
 import './App.css';
+import Verification from './pages/Verification';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/verification" element={<Verification />} />
         </Routes>
       </div>
     </Router>
