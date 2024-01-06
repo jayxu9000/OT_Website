@@ -11,6 +11,7 @@ function SignUp() {
   const [password, setPassword] = useState('');
   const [image, setImage] = useState(null);
   const [linkedIn, setlinkedIn] = useState('');
+  const [resume, setResume] = useState('')
   const [verified, setVerified] = useState(false)
   const [admin, setAdmin] = useState(false)
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
@@ -29,7 +30,7 @@ function SignUp() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ firstName, lastName, lineNumber, email, password, image, linkedIn, verified, admin }),
+        body: JSON.stringify({ firstName, lastName, lineNumber, email, password, image, linkedIn, resume, verified, admin }),
       });
       const data = await response.json();
 

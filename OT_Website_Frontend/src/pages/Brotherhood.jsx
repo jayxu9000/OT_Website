@@ -18,12 +18,13 @@ function Brotherhood() {
         }
         const profileData = await response.json();
         const verifiedProfiles = profileData.filter(profile => profile.verified);
+
+        if (verifiedProfiles.length > 0) {
+          console.log("First profile's resume data:", verifiedProfiles[0].resume);
+        }
+        
         setProfiles(verifiedProfiles);
   
-        // Log the image data of the first profile
-        if (verifiedProfiles.length > 0) {
-          console.log("First profile's image data:", verifiedProfiles[0].image);
-        }
       } catch (error) {
         console.error('Error fetching users:', error);
       }
@@ -45,7 +46,8 @@ function Brotherhood() {
               firstName={profile.firstName} 
               lastName={profile.lastName} 
               img={profile.image || blankProfile} 
-              linkedIn={profile.linkedIn} />
+              linkedIn={profile.linkedIn}
+              resume={profile.resume} />
           ))}
         </div>
       )}

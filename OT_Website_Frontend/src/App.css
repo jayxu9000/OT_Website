@@ -182,9 +182,10 @@ p {
   height: 150px;
 }
 
-.refs img, .refs a{
-  width: 50px;
-  height: 50px;
+.refs img, refs a {
+  width: 40px;
+  height: 40px;
+  padding: .5rem;
 }
 
 .settings {
@@ -243,14 +244,19 @@ p {
 }
 
 .currentLinkedIn {
-  background-color: darkgreen;
+  background-color: darkslategray;
   padding-bottom: 2rem;
   padding-top: .5rem;
 }
 
-.currentLinkedIn form button, .currentLinkedIn form button {
-  margin-right: .5rem;
-  margin-left: .5rem;
+.currentLinkedIn form button {
+  margin-left: 3.75rem;
+}
+
+.resumeSection {
+  background-color: darkolivegreen;
+  padding-bottom: 3rem;
+  padding-top: 1rem;
 }
 
 .imageSection {
@@ -276,4 +282,9 @@ p {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.inactiveResume, .inactiveLinkedIn {
+  pointer-events: none; /* Disables clicking */
+  opacity: 0.5; /* Makes the link appear faded */
 }

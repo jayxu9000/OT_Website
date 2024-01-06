@@ -92,19 +92,29 @@ router.post('/logout', (req, res) => {
 
 router.get('/Profile', async (req, res) => {
     try {
-        const users = await User.find({}).select('firstName lastName image linkedIn _id verified');
-        const usersWithImages = users.map(user => {
-            const userObj = user.toObject(); // Convert to plain JavaScript object
+        const users = await User.find({}).select('firstName lastName image linkedIn _id verified resume');
+        const usersWithImagesAndResumes = users.map(user => {
+            const userObj = user.toObject();
+
             if (userObj.image) {
-                // Convert the Buffer directly to a Base64 string
                 const imageBase64 = userObj.image.toString('base64');
                 userObj.image = `data:image/png;base64,${imageBase64}`; // Adjust MIME type if necessary
             } else {
                 userObj.image = null;
             }
+
+            // Convert resume to Base64 if it exists
+            if (userObj.resume) {
+                const resumeBase64 = userObj.resume.toString('base64');
+                userObj.resume = `data:application/pdf;base64,${resumeBase64}`;
+            } else {
+                userObj.resume = null;
+            }
+
             return userObj;
         });
-        res.json(usersWithImages);
+
+        res.json(usersWithImagesAndResumes);
     } catch (err) {
         res.status(500).json({ message: "Server error" });
     }

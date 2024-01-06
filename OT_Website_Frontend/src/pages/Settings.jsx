@@ -7,6 +7,7 @@ import DemoteButton from '../components/DemoteButton';
 function Settings() {
     const { authData, login } = useAuth(); 
     const [linkedInURL, setlinkedInURL] = useState('');
+    const [resume, setResume] = useState('')
     const [updateStatus, setUpdateStatus] = useState('');
     const [image, setImage] = useState(null)
     const [isAdmin, setIsAdmin] = useState(false);
@@ -82,6 +83,36 @@ function Settings() {
         }
     };
 
+    const handleResumeChange = (e) => {
+        const file = e.target.files[0];
+        if (file && file.type === "application/pdf") {
+            setResume(file);
+        } else {
+            console.error('Please select a PDF file.');
+        }
+    };
+
+    const updateUserResume = async (e) => {
+        e.preventDefault(); 
+
+        const formData = new FormData();
+        if (resume) {
+            formData.append('resume', resume);
+        }
+
+        try {
+            const response = await fetch(`${apiUrl}/users/resume/${authData.email}`, {
+                method: 'PUT',
+                body: formData
+            });
+
+            // ... handle the response as needed
+        } catch (error) {
+            console.error('There was an error with the update request:', error);
+            // ... handle the error as needed
+        }
+    };
+
     useEffect(() => {
         const checkAdminStatus = async () => {
             try {
@@ -107,10 +138,10 @@ function Settings() {
     return (
         <div className='settings'>
             <div className='imageSection'>
-                <h2>Settings:</h2>
-                <p>{authData.name}</p>
-                <p>Current Profile Picture:</p>
+                <h2>{authData.firstName}'s Personal Profile:</h2>
+                <p>Current profile picture:</p>
                 <img className="settingsImage" src={authData.image} alt="Profile Picture" />
+                <p>Note: Profile images must be a perfect square for best quality. Ex: 150x150</p>
                 <form onSubmit={updateUserImage}>
                     <input
                         type="file"
@@ -118,7 +149,6 @@ function Settings() {
                         onChange={handleImageChange}
                         required
                     />
-                    <p>Note: Profile images must be a perfect square for best quality. Ex: 150x150</p>
                     <button type="submit">Update Profile Picture</button>
                 </form>
             </div>
@@ -136,7 +166,20 @@ function Settings() {
                 </form>
                 {updateStatus && <p>{updateStatus}</p>}
             </div>
-           
+
+            <div className='resumeSection'>
+                <p>Upload your resume:</p>
+                <form onSubmit={updateUserResume}>
+                    <input
+                        type="file"
+                        accept="application/pdf"
+                        onChange={handleResumeChange}
+                        required
+                    />
+                    <button type="submit">Upload Resume</button>
+                </form>
+            </div>
+            
             {isAdmin && (
                 <div className='tableContainer'>
                     <DemoteButton />

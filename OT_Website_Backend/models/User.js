@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false
   },
+  resume: {
+    type: Buffer,
+    required: false
+  },
   verified: {
     type: Boolean,
     required: true
