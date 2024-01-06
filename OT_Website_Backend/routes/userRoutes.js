@@ -110,6 +110,29 @@ router.get('/Profile', async (req, res) => {
     }
 });
 
+router.get('/Profile/image/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        // Fetch the user by ID
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        // Assuming 'user.image' contains the BinData for the image
+        if (user.image) {
+            // Set the appropriate content type based on the image format (e.g., image/jpeg)
+            res.contentType('image/jpeg'); // Modify this based on your image format
+            // Send the image data as the response
+            res.send(user.image);
+        } else {
+            res.status(404).json({ message: "Image not found" });
+        }
+    } catch (err) {
+        // If an error occurs, send a 500 Internal Server Error response
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
 router.put('/linkedIn/:email', async (req, res) => {
     const { email } = req.params;
     const { linkedIn } = req.body;

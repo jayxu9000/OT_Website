@@ -32,9 +32,6 @@ function Brotherhood() {
   
     fetchProfiles();
   }, []);
-  
-  
-  
 
   return (
     <div className='Brothers'>
@@ -44,7 +41,11 @@ function Brotherhood() {
       ) : (
         <div className='brotherList'>
           {profiles.map((profile) => (
-            <Profile key={profile._id} firstName={profile.firstName} lastName={profile.lastName} img={profile.image || blankProfile} linkedIn={profile.linkedIn} />
+            <Profile key={profile._id} 
+              firstName={profile.firstName} 
+              lastName={profile.lastName} 
+              img={profile.image || blankProfile} 
+              linkedIn={profile.linkedIn} />
           ))}
         </div>
       )}
