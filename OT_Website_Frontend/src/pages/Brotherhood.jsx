@@ -10,39 +10,31 @@ function Brotherhood() {
 
   useEffect(() => {
     const fetchProfiles = async () => {
-      setIsLoading(true); // Start loading
+      setIsLoading(true);
       try {
         const response = await fetch(`${apiUrl}/users/Profile`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const profileData = await response.json();
-
-        // Fetch and attach images to each user profile
-        const profilesWithImages = await Promise.all(
-          profileData.map(async (profile) => {
-            if (profile.image) {
-              const imageResponse = await fetch(`${apiUrl}/users/Profile/image/${profile._id}`);
-              if (imageResponse.ok) {
-                const imageBlob = await imageResponse.blob();
-                const imageUrl = URL.createObjectURL(imageBlob);
-                profile.image = imageUrl;
-              }
-            }
-            return profile;
-          })
-        );
-
-        const verifiedProfiles = profilesWithImages.filter(profile => profile.verified);
+        const verifiedProfiles = profileData.filter(profile => profile.verified);
         setProfiles(verifiedProfiles);
+  
+        // Log the image data of the first profile
+        if (verifiedProfiles.length > 0) {
+          console.log("First profile's image data:", verifiedProfiles[0].image);
+        }
       } catch (error) {
         console.error('Error fetching users:', error);
       }
-      setIsLoading(false); // Stop loading
+      setIsLoading(false);
     };
-
+  
     fetchProfiles();
   }, []);
+  
+  
+  
 
   return (
     <div className='Brothers'>

@@ -93,46 +93,19 @@ router.post('/logout', (req, res) => {
 router.get('/Profile', async (req, res) => {
     try {
         const users = await User.find({}).select('firstName lastName image linkedIn _id verified');
-
-        const usersWithBase64Images = users.map(user => {
-            if (user.image && user.image.contentType) {
-                // Convert the buffer to a Base64 string
-                const imageBase64 = user.image.toString('base64');
-                // Prepend the appropriate data URI scheme header based on the contentType
-                user.image = `data:${user.image.contentType};base64,${imageBase64}`;
+        const usersWithImages = users.map(user => {
+            const userObj = user.toObject(); // Convert to plain JavaScript object
+            if (userObj.image) {
+                // Convert the Buffer directly to a Base64 string
+                const imageBase64 = userObj.image.toString('base64');
+                userObj.image = `data:image/png;base64,${imageBase64}`; // Adjust MIME type if necessary
+            } else {
+                userObj.image = null;
             }
-            return user;
+            return userObj;
         });
-
-        res.json(usersWithBase64Images);
+        res.json(usersWithImages);
     } catch (err) {
-        res.status(500).json({ message: "Server error" });
-    }
-});
-
-router.get('/Profile/image/:id', async (req, res) => {
-    try {
-        const userId = req.params.id;
-
-        // Fetch the user by ID
-        const user = await User.findById(userId);
-
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        // Assuming 'user.image' contains the BinData for the image
-        if (user.image) {
-            // Set the appropriate content type based on the image format (e.g., image/jpeg)
-            res.contentType('image/jpeg'); // Modify this based on your image format
-
-            // Send the image data as the response
-            res.send(user.image);
-        } else {
-            res.status(404).json({ message: "Image not found" });
-        }
-    } catch (err) {
-        // If an error occurs, send a 500 Internal Server Error response
         res.status(500).json({ message: "Server error" });
     }
 });
