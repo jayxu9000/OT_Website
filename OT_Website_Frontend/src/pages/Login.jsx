@@ -44,7 +44,7 @@ function Login() {
 
   return (
     <div className='login'>
-      <h3>Login:</h3>
+      <h2>Login:</h2>
       <form className='loginForm' onSubmit={handleSubmit}>
         <input
           type="text"

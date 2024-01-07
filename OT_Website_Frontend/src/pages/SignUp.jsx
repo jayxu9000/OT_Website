@@ -64,7 +64,7 @@ function SignUp() {
 
   return (
     <div className='signUp'>
-      <h3>Sign Up</h3>
+      <h2>Sign Up</h2>
       <form className='signUpForm' onSubmit={handleSubmit}>
         <input
           type="text"
