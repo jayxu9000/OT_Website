@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
+import LoadingSpinner from '../components/LoadSpinner';
 
 function SignUp() {
 
@@ -19,9 +20,12 @@ function SignUp() {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
+
+  const [isLoading, setIsLoading] = useState(false)
   
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true)
     setErrorMessage('');
     
     try {
@@ -44,6 +48,8 @@ function SignUp() {
       console.error('There was an error with the signup request:', error); // If there was a problem with the fetch request itself, display a generic error message
       setErrorMessage('An error occurred during signup. Please try again later.');
     }
+
+    setIsLoading(false)
   };
 
   const handleEmailChange = (e) => {
@@ -90,7 +96,7 @@ function SignUp() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Sign Up</button>
+        {isLoading? <LoadingSpinner /> : <button type="submit" disabled={isLoading}>Sign Up</button>}
       </form>
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
     </div>
