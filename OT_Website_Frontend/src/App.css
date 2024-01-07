@@ -181,7 +181,13 @@ p {
   padding: 1rem;
 }
 
+.Profile img:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s, opacity 0.2s;
+}
+
 .Profile img {
+  transition: transform 0.2s, opacity 0.2s;
   width: 150px;
   height: 150px;
 }
@@ -208,11 +214,13 @@ p {
   align-items: center;
   height: 100%; /* You may adjust the height as needed */
   background-color: darkred;
-  padding-bottom: 1rem
+  padding-bottom: 1rem;
+  width: 34%;
 }
 
 .newList {
-  padding-bottom: 1rem
+  padding-bottom: 1rem;
+  width: 34%;
 }
 
 .adminList {
@@ -220,18 +228,20 @@ p {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%; /* You may adjust the height as needed */
+  height: 150px; /* You may adjust the height as needed */
   background-color: darkgoldenrod;
-  padding-bottom: 1rem
+  padding-bottom: 1rem;
+  width: 34%;
 }
 
 .demoteButton {
   background-color: black;
-  padding-bottom: .5rem;
+  padding-bottom: 1rem;
   height: 150px;
+  width: 33%
 }
 
-.newList table, .adminList table {
+.newList table {
   /* Add a width if you want to control the size of the table */
   width: 50%; /* Example width, you can set this to the width you want */
   margin-left: auto;
