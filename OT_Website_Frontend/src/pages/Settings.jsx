@@ -179,7 +179,7 @@ function Settings() {
             </div>
 
             <div className='resumeSection'>
-                <p>Upload your resume:</p>
+                <p>Upload your resume (PDF Only):</p>
                 <form onSubmit={updateUserResume}>
                     <input
                         type="file"
