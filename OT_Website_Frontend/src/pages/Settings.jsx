@@ -8,7 +8,9 @@ function Settings() {
     const { authData, login } = useAuth(); 
     const [linkedInURL, setlinkedInURL] = useState('');
     const [resume, setResume] = useState('')
-    const [updateStatus, setUpdateStatus] = useState('');
+    const [imageStatus, setImageStatus] = useState('');
+    const [linkedInStatus, setLinkedInStatus] = useState('');
+    const [resumeStatus, setResumeStatus] = useState('');
     const [image, setImage] = useState(null)
     const [isAdmin, setIsAdmin] = useState(false);
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
@@ -33,15 +35,15 @@ function Settings() {
             const data = await response.json();
             if (response.ok) {
                 console.log('LinkedIn updated', data);
-                setUpdateStatus('LinkedIn URL updated successfully.');
+                setLinkedInStatus('LinkedIn URL updated successfully.');
                 login({...authData, linkedIn: linkedInURL })
             } else {
                 console.error('LinkedIn update failed:', data.message);
-                setUpdateStatus('Failed to update LinkedIn URL.');
+                setLinkedInStatus('Failed to update LinkedIn URL.');
             }
         } catch (error) {
             console.error('There was an error with the update request:', error);
-            setUpdateStatus('An error occurred during the update. Please try again later.');
+            setLinkedInStatus('An error occurred during the update. Please try again later.');
         }
     };
 
@@ -62,15 +64,15 @@ function Settings() {
             const data = await response.json();
             if (response.ok) {
                 console.log('Image updated', data);
-                setUpdateStatus('Profile picture updated successfully.');
+                setImageStatus('Profile picture updated successfully.');
                 login({...authData, image: URL.createObjectURL(image) })
             } else {
                 console.error('Image update failed:', data.message);
-                setUpdateStatus('Failed to update Image.');
+                setImageStatus('Failed to update Image.');
             }
         } catch (error) {
             console.error('There was an error with the update request:', error);
-            setUpdateStatus('An error occurred during the update. Please try again later.');
+            setImageStatus('An error occurred during the update. Please try again later.');
         }
 
     };
@@ -106,10 +108,18 @@ function Settings() {
                 body: formData
             });
 
-            // ... handle the response as needed
+            const data = await response.json();
+            if (response.ok) {
+                console.log('Resume updated', data);
+                setResumeStatus('Resume uploaded successfully.');
+                // Optionally update authData with resume information if needed
+            } else {
+                console.error('Resume update failed:', data.message);
+                setResumeStatus('Failed to upload resume.');
+            }
         } catch (error) {
             console.error('There was an error with the update request:', error);
-            // ... handle the error as needed
+            setResumeStatus('An error occurred during the update. Please try again later.');
         }
     };
 
@@ -150,6 +160,7 @@ function Settings() {
                         required
                     />
                     <button type="submit">Update Profile Picture</button>
+                    {imageStatus && <p>{imageStatus}</p>}
                 </form>
             </div>
             <div className='currentLinkedIn'>
@@ -163,8 +174,8 @@ function Settings() {
                         required
                     />
                     <button type="submit">Update LinkedIn</button>
+                    {linkedInStatus && <p>{linkedInStatus}</p>}
                 </form>
-                {updateStatus && <p>{updateStatus}</p>}
             </div>
 
             <div className='resumeSection'>
@@ -177,6 +188,7 @@ function Settings() {
                         required
                     />
                     <button type="submit">Upload Resume</button>
+                    {resumeStatus && <p>{resumeStatus}</p>}
                 </form>
             </div>
             

@@ -190,6 +190,31 @@ router.put('/image/:email', upload.single('image'), async (req, res) => {
     }
 });
 
+router.put('/resume/:email', upload.single('resume'), async (req, res) => {
+    const { email } = req.params;
+    const resumeFile = req.file;
+
+    if (!resumeFile) {
+        return res.status(400).json({ message: "No resume file uploaded." });
+    }
+
+    try {
+        // Update the user's resume in the database
+        const updateResult = await User.updateOne(
+            { email },
+            { $set: { resume: resumeFile.buffer } } // Store the resume buffer
+        );
+
+        if (updateResult.matchedCount === 0) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        res.status(200).json({ message: "Resume updated successfully" });
+    } catch (err) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
 // GET route to get a list of non-admin users with specific fields
 router.get('/nonAdminUsers', async (req, res) => {
     try {
