@@ -227,12 +227,13 @@ p {
 
 .demoteButton {
   background-color: black;
-  padding-bottom: .5rem
+  padding-bottom: .5rem;
+  height: 150px;
 }
 
 .newList table, .adminList table {
   /* Add a width if you want to control the size of the table */
-  width: 80%; /* Example width, you can set this to the width you want */
+  width: 50%; /* Example width, you can set this to the width you want */
   margin-left: auto;
   margin-right: auto;
 }
